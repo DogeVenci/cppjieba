@@ -35,7 +35,7 @@ Jieba jieba(DICT_PATH,
             STOP_WORD_PATH);
 
 // EM_PORT_API(vector<KeywordExtractor::Word>)
-vector<string> Extract(string s, size_t topN)
+vector<string> ExtractWord(string s, size_t topN)
 {
     clock_t start = clock();
     // vector<KeywordExtractor::Word> keywordres;
@@ -51,8 +51,16 @@ vector<string> Extract(string s, size_t topN)
     return words;
 }
 
+vector<string> CutForSearch(string s, bool hmm = true)
+{
+    vector<string> words;
+    jieba.CutForSearch(s, words, hmm);
+    return words;
+}
+
 EMSCRIPTEN_BINDINGS(my_module)
 {
-    emscripten::function("Extract", &Extract);
+    emscripten::function("ExtractWord", &ExtractWord);
+    emscripten::function("CutForSearch", &CutForSearch);
     register_vector<string>("vector<string>");
 }
